@@ -1,0 +1,33 @@
+.app {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  gap: 20px;
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  color: #007bff;
+}
+
+.page {
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-top: 20px;
+}
