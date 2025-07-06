@@ -1,0 +1,138 @@
+.notification-container {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.notification-button {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-size: 20px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    border-radius: 24px;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.notification-button:hover {
+    background-color: var(--primary-color-hover);
+}
+
+.notification-button:active {
+    background-color: var(--primary-color);
+}
+
+.notification-dot {
+    position: absolute;
+    top: -5px;
+    right: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--delete-color);
+    border: 2px solid var(--secondary-color);
+    border-radius: 50%;
+}
+
+.notification-popup {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notification-popup-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.notification-popup-scrollpane {
+    background: transparent;
+    background-color: transparent;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.notification-popup-scrollpane::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-popup-scrollpane::-webkit-scrollbar-track {
+    background-color: var(--third-color);
+    border-radius: 4px;
+}
+
+.notification-popup-scrollpane::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+}
+
+.notification-popup-requests-container {
+    padding: 10px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.notification-popup-no-requests {
+    color: var(--primary-color);
+    font-size: 14px;
+}
+
+.friend-request-item {
+    background-color: var(--third-color);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.friend-request-username {
+    color: var(--primary-color);
+    font-size: 14px;
+}
+
+.friend-request-accept-button {
+    background-color: var(--primary-color);
+    color: var(--text-color-white);
+    font-size: 14px;
+    width: 40px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+}
+
+.friend-request-accept-button:hover {
+    background-color: var(--primary-color-hover);
+}
+
+.friend-request-decline-button {
+    background-color: var(--delete-color);
+    color: var(--text-color-white);
+    font-size: 14px;
+    width: 40px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+}
+
+.friend-request-decline-button:hover {
+    opacity: 0.8;
+}

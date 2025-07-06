@@ -1,0 +1,41 @@
+:root {
+    --primary-color: #7289DA;
+    --primary-color-hover: #5B6EAE;
+    --primary-color-light: #8ea1e1;
+    --primary-color-dark: #4a5bb8;
+    --primary-color-focus: #a5b4e6;
+
+    --secondary-color: #C5CCEB;
+    --third-color: #E2E6F2;
+
+    --delete-color: #F04747;
+    --delete-color-hover: #f56565;
+    --error-color: #ff0000;
+
+    --success-color: #27ae60;
+
+    --background-color: #f8f9fa;
+    --background-color-white: #ffffff;
+    --background-color-light: #f8f9fa;
+
+    --border-color: #e9ecef;
+    --border-color-light: #cccccc;
+
+    --text-color-dark: #2c3e50;
+    --text-color-muted: #7f8c8d;
+    --text-color-light: #bdc3c7;
+    --text-color-white: white;
+
+    --header-height: 50px;
+}
+
+* {
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}

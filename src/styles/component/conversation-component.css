@@ -1,0 +1,205 @@
+.root-container {
+    background-color: var(--background-color);
+    min-width: 400px;
+    width: 500px;
+}
+
+.header-container {
+    background-color: color-mix(in srgb, var(--background-color-white) 97%, black);
+    min-height: 60px;
+    max-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-width: 0 0 1px 1px;
+    border-style: solid;
+    border-color: var(--border-color);
+    padding: 0 20px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+}
+
+.conversation-container {
+    padding: 0 20px 16px 20px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-scroll-pane {
+    padding: 16px;
+    background-color: transparent;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.chat-scroll-pane::-webkit-scrollbar {
+    width: 12px;
+    padding: 8px;
+}
+
+.chat-scroll-pane::-webkit-scrollbar-track {
+    background-color: color-mix(in srgb, var(--background-color) 95%, black);
+    border-radius: 8px;
+}
+
+.chat-scroll-pane::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+}
+
+.message-container, .message-group {
+    width: 100%;
+    min-width: 400px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-container {
+    padding: 16px;
+    background-color: var(--background-color-white);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+.input-container:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px var(--primary-color-focus);
+}
+
+.header-username {
+    font-weight: bold;
+    color: var(--text-color-dark);
+    font-size: 18px;
+}
+
+.user-username, .other-username {
+    font-size: 13px;
+    padding: 0 12px 4px 12px;
+    font-weight: bold;
+}
+
+.user-message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.other-message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.user-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.other-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.user-username {
+    text-align: right;
+    color: color-mix(in srgb, var(--primary-color) 90%, black);
+}
+
+.other-username {
+    text-align: left;
+    color: var(--text-color-muted);
+}
+
+.user-message, .other-message {
+    padding: 12px 16px;
+    max-width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.user-message {
+    background-color: var(--primary-color);
+    border-radius: 12px 12px 6px 12px;
+}
+
+.other-message {
+    background-color: var(--background-color-white);
+    border-radius: 12px 12px 12px 6px;
+    border: 1px solid var(--border-color);
+}
+
+.message-label {
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.user-message .message-label {
+    color: var(--text-color-white);
+    font-weight: bold;
+}
+
+.other-message .message-label {
+    color: var(--text-color-dark);
+    font-weight: normal;
+}
+
+.message-input {
+    background-color: transparent;
+    color: var(--text-color-dark);
+    padding: 12px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    flex: 1;
+}
+
+.message-input::placeholder {
+    color: var(--text-color-muted);
+}
+
+.system-message-container {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+}
+
+.system-message {
+    padding: 8px 16px;
+    background-color: color-mix(in srgb, var(--background-color) 92%, black);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+
+.system-message .message-label {
+    color: var(--text-color-muted);
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.user-message-container:hover .user-message,
+.other-message-container:hover .other-message {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.message-timestamp {
+    color: var(--text-color-light);
+    font-size: 11px;
+    font-style: italic;
+    padding: 4px 0 0 0;
+    text-align: right;
+}
