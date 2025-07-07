@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import { Bell } from 'lucide-react';
 import '../styles/component/notification-button-component.css';
 import type {IFriendRequestService} from "../services/friend/IFriendRequestService.ts";
 import {FriendRequestService} from "../services/friend/FriendRequestService.ts";
@@ -193,6 +194,7 @@ const NotificationButtonController = forwardRef<NotificationButtonControllerRef>
                 className="notification-button"
                 onClick={onNotificationClick}
             >
+                <Bell size={24} />
                 {hasNotifications && (
                     <div className="notification-dot"></div>
                 )}

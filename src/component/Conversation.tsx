@@ -121,7 +121,7 @@ export const Conversation: React.FC<ConversationControllerProps> = ({selectedFri
         }
 
         initializeConversation(username);
-        loadConversationMessages();
+        loadConversationMessages(conversationId);
     };
 
     const initializeConversation = (username: string) => {
@@ -135,15 +135,17 @@ export const Conversation: React.FC<ConversationControllerProps> = ({selectedFri
         }, 100);
     };
 
-    const loadConversationMessages = async () => {
-        if (!currentConversationId) {
+    const loadConversationMessages = async (id: number | null) => {
+        if (!id) {
             return;
         }
 
         try {
-            const messagesList = await messageService.current.getConversationMessages(currentConversationId);
+            const messagesList = await messageService.current.getConversationMessages(id);
             setMessages(messagesList);
             scrollToBottom();
+            console.log("Messages loaded for conversation ID:", id);
+            console.log(messagesList);
         } catch (error) {
             console.error("Failed to load conversation messages", error);
         }
@@ -192,17 +194,19 @@ export const Conversation: React.FC<ConversationControllerProps> = ({selectedFri
 
     return (
         <div className="root-container">
-            <div className="message-scroll-pane" ref={messageScrollRef}>
-                <div className="message-list">
-                    {renderMessages()}
-                </div>
+            <div className="header-container">
+                <span className="header-username">{recipientName}</span>
             </div>
+
+            <div className="message-scroll-pane" ref={messageScrollRef}>
+                <div className="message-list">{renderMessages()}</div>
+            </div>
+
             <div className="input-container">
-                <div className="recipient-name">{recipientName}</div>
                 <input
                     ref={inputFieldRef}
                     type="text"
-                    className="input-field"
+                    className="input-field-conversation"
                     value={inputFieldValue}
                     onChange={(e) => setInputFieldValue(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -212,4 +216,5 @@ export const Conversation: React.FC<ConversationControllerProps> = ({selectedFri
             </div>
         </div>
     );
+
 };

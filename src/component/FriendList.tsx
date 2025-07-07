@@ -6,6 +6,7 @@ import type { WebSocketService } from '../services/websocket/WebSocketService';
 import '../styles/component/friend-list-component.css';
 import AddFriendController from './AddFriendController.tsx';
 import type { FriendSelectionListener } from './listeners/FriendSelectionListener.tsx';
+import { RotateCcw } from 'lucide-react';
 
 interface FriendListControllerProps {
     friendService?: IFriendService;
@@ -20,16 +21,9 @@ const FriendList: React.FC<FriendListControllerProps> = ({
                                                              friendSelectionListener: initialFriendSelectionListener,
                                                              onLogout,
                                                          }) => {
-    /**
-     * -------------------------------------------------------------------------------------------
-     * STATE
-     * -------------------------------------------------------------------------------------------
-     */
     const [allFriends, setAllFriends] = useState<FriendDTO[]>([]);
     const [filteredFriends, setFilteredFriends] = useState<FriendDTO[]>([]);
-    const [friendSelectionListener] = useState<FriendSelectionListener | undefined>(
-        initialFriendSelectionListener,
-    );
+    const [friendSelectionListener] = useState<FriendSelectionListener | undefined>(initialFriendSelectionListener);
     const [friendService] = useState<IFriendService | undefined>(initialFriendService);
     const [webSocketService] = useState<WebSocketService | undefined>(initialWebSocketService);
     const [selectedView, setSelectedView] = useState<'friends' | 'addFriend'>('friends');
@@ -37,36 +31,22 @@ const FriendList: React.FC<FriendListControllerProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFriendId, setSelectedFriendId] = useState<string | null>(null);
     const [currentUser, setCurrentUser] = useState<string>('');
-
     const addFriendControllerRef = useRef<{ resetForm: () => void } | null>(null);
 
-    /**
-     * -------------------------------------------------------------------------------------------
-     * EFFECTS
-     * -------------------------------------------------------------------------------------------
-     */
     useEffect(() => {
         initialize();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         if (webSocketService) {
             setupWebSocketSubscription();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [webSocketService]);
 
     useEffect(() => {
         filterFriends(searchText);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchText, allFriends]);
 
-    /**
-     * -------------------------------------------------------------------------------------------
-     * INITIALISATION & WS
-     * -------------------------------------------------------------------------------------------
-     */
     const initialize = () => {
         displayCurrentUser();
         showLoadingMessage();
@@ -77,18 +57,10 @@ const FriendList: React.FC<FriendListControllerProps> = ({
         if (webSocketService && webSocketService.isConnected()) {
             webSocketService.setFriendNotificationReceivedCallback((username: string) => {
                 const currentUser = SessionManager.getInstance().getUsername();
-                console.log('=== FRIEND NOTIFICATION RECEIVED ===');
-                console.log('Received username: ' + username);
-                console.log('Current user: ' + currentUser);
-
                 if (username === currentUser) {
-                    console.log('Refreshing friends list...');
                     refreshFriendsList();
                 }
-
-                console.log('====================================');
             });
-
             webSocketService.subscribeToFriendNotifications();
         }
     };
@@ -100,22 +72,11 @@ const FriendList: React.FC<FriendListControllerProps> = ({
         }
     };
 
-    /**
-     * -------------------------------------------------------------------------------------------
-     * AUTH / LOGOUT
-     * -------------------------------------------------------------------------------------------
-     */
     const handleLogout = () => {
         SessionManager.getInstance().clearSession();
-
         onLogout?.();
     };
 
-    /**
-     * -------------------------------------------------------------------------------------------
-     * VIEW MANAGEMENT
-     * -------------------------------------------------------------------------------------------
-     */
     const showLoadingMessage = () => setIsLoading(true);
 
     const showFriendsList = () => {
@@ -128,11 +89,6 @@ const FriendList: React.FC<FriendListControllerProps> = ({
         addFriendControllerRef.current?.resetForm();
     };
 
-    /**
-     * -------------------------------------------------------------------------------------------
-     * DATA FETCHING & UPDATE
-     * -------------------------------------------------------------------------------------------
-     */
     const updateFriendsList = (friends: FriendDTO[]) => {
         setAllFriends([...friends]);
         if (selectedView === 'friends') {
@@ -143,9 +99,7 @@ const FriendList: React.FC<FriendListControllerProps> = ({
 
     const refreshFriendsList = () => {
         if (!friendService) return;
-
         showLoadingMessage();
-
         friendService
             .getFriendsList()
             .then((friends) => {
@@ -153,39 +107,29 @@ const FriendList: React.FC<FriendListControllerProps> = ({
                 if (selectedView === 'friends') {
                     setFilteredFriends(friends);
                 }
-                console.log('Friends list refreshed: ' + friends.length + ' friends');
             })
-            .catch((error) => {
+            .catch(() => {
                 setIsLoading(false);
-                console.error('Failed to refresh friends list', error);
             });
     };
 
-    /**
-     * -------------------------------------------------------------------------------------------
-     * FILTER & SEARCH
-     * -------------------------------------------------------------------------------------------
-     */
     const filterFriends = (text: string) => {
         if (!text.trim()) {
             setFilteredFriends(allFriends);
             return;
         }
-
         const lowerCaseFilter = text.toLowerCase();
         const filtered = allFriends.filter((friend) =>
-            friend.username?.toLowerCase().includes(lowerCaseFilter),
+            friend.username?.toLowerCase().includes(lowerCaseFilter)
         );
         setFilteredFriends(filtered);
     };
 
     const handleFriendClick = (friend: FriendDTO) => {
         const { username, conversationId } = friend;
-
         if (friendSelectionListener && username && conversationId !== undefined) {
-            friendSelectionListener.onFriendSelected(username, conversationId);
+            friendSelectionListener.onFriendSelected(username, Number(conversationId));
         }
-
         if (username) {
             setSelectedFriendId(username);
         }
@@ -201,13 +145,10 @@ const FriendList: React.FC<FriendListControllerProps> = ({
         refreshFriendsList();
     };
 
-
     const renderFriendItem = (friend: FriendDTO) => {
         const { username } = friend;
         if (!username) return null;
-
         const isSelected = selectedFriendId === username;
-
         return (
             <div
                 key={username}
@@ -221,16 +162,10 @@ const FriendList: React.FC<FriendListControllerProps> = ({
     };
 
     const renderFriendsList = () => {
-        if (isLoading) {
-            return <div className="loading-label">Chargement des amis...</div>;
-        }
-
-        if (filteredFriends.length === 0) {
-            return <div className="empty-label">Aucun ami trouvé</div>;
-        }
-
+        if (isLoading) return <div className="loading-label">Chargement des amis...</div>;
+        if (filteredFriends.length === 0) return <div className="empty-label">Aucun ami trouvé</div>;
         return (
-            <div className="friends-list">
+            <div className="friends-list-container">
                 {filteredFriends.filter((f) => f.username).map(renderFriendItem)}
             </div>
         );
@@ -246,47 +181,51 @@ const FriendList: React.FC<FriendListControllerProps> = ({
     );
 
     return (
-        <div className="root-container">
-            <div className="navigation-header">
+        <div className="friend-root-container">
+            <div className="header-container">
+                <div className="header-title">DIRECT MESSAGES</div>
+            </div>
+
+            <div className="buttons-container">
                 <button
-                    className={`toggle-button ${selectedView === 'friends' ? 'selected' : ''}`}
+                    className={`nav-button ${selectedView === 'friends' ? 'selected' : ''}`}
                     onClick={showFriendsList}
                 >
-                    Friends
+                    Amis
                 </button>
                 <button
-                    className={`toggle-button ${selectedView === 'addFriend' ? 'selected' : ''}`}
+                    className={`nav-button ${selectedView === 'addFriend' ? 'selected' : ''}`}
                     onClick={showAddFriendView}
                 >
-                    Add Friend
+                    Ajouter des amis
                 </button>
             </div>
 
-            {selectedView === 'friends' && (
-                <>
-                    <div className="search-container">
-                        <input
-                            type="text"
-                            className="search-field"
-                            placeholder="Search friends..."
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                        />
-                        <button className="refresh-button" onClick={refreshFriendsList}>
-                            Refresh
-                        </button>
-                    </div>
+            <div className="search-container">
+                <input
+                    type="text"
+                    className="search-field"
+                    placeholder="Rechercher un ami..."
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                />
+                <button className="refresh-icon-button" onClick={refreshFriendsList}>
+                    <RotateCcw size={20} />
+                </button>
+            </div>
 
-                    <div className="friends-scroll-pane">{renderFriendsList()}</div>
-                </>
-            )}
+            <div className="friends-scroll-pane">
+                {selectedView === 'friends' && renderFriendsList()}
+                {selectedView === 'addFriend' && renderAddFriendView()}
+            </div>
 
-            {selectedView === 'addFriend' && renderAddFriendView()}
+            <div className="user-info-section">
+                <div className="current-user-label">{currentUser}</div>
+            </div>
 
-            <div className="user-info">
-                <span className="current-user-label">{currentUser}</span>
+            <div className="logout-section">
                 <button className="logout-button" onClick={handleLogout}>
-                    Logout
+                    Déconnexion
                 </button>
             </div>
         </div>

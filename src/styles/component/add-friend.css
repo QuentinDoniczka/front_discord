@@ -1,0 +1,85 @@
+.add-friend-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    background: var(--background-color-white);
+    border-radius: 12px;
+    /* box-shadow supprimé */
+}
+
+.add-friend-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-color-dark);
+}
+
+.add-friend-field {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--background-color-light);
+    transition: border-color 0.2s ease;
+    color: var(--text-color-dark);
+}
+
+.add-friend-field::placeholder {
+    color: var(--text-color-muted);
+}
+
+.add-friend-field:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    background: var(--background-color-white);
+}
+
+.add-friend-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: var(--primary-color);
+    color: var(--text-color-white);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.add-friend-button:hover {
+    background-color: var(--primary-color-hover);
+    transform: scale(1.02);
+}
+
+.add-friend-button:active {
+    transform: scale(0.97);
+}
+
+.add-friend-button:disabled {
+    background-color: #c0c0c0;
+    cursor: not-allowed;
+}
+
+.status-label {
+    font-size: 14px;
+    margin-top: 4px;
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.status-label.success {
+    background-color: var(--success-color);
+    color: var(--text-color-white);
+}
+
+.status-label.error {
+    background-color: var(--delete-color);
+    color: var(--text-color-white);
+}

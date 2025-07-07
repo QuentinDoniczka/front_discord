@@ -27,6 +27,10 @@
     --text-color-white: white;
 
     --header-height: 50px;
+    --nav-width: 80px;
+    --friend-list-width: 280px;
+    --conversation-width: calc(100% - var(--friend-list-width) - var(--nav-width));
+
 }
 
 * {

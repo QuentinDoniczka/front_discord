@@ -1,5 +1,4 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import '../styles/component/left-navbar-component.css';
 import NotificationButtonController, {type NotificationButtonControllerRef} from "./NotificationButton.tsx";
 import type {IFriendRequestAcceptedListener} from "../services/IFriendRequestAcceptedListener.ts";
 
