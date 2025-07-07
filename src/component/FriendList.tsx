@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { SessionManager } from '../managers/SessionManager';
 import type { FriendDTO } from '../models/FriendDTO';
 import type { IFriendService } from '../services/friend/IFriendService';
@@ -15,12 +15,16 @@ interface FriendListControllerProps {
     onLogout?: () => void;
 }
 
-const FriendList: React.FC<FriendListControllerProps> = ({
-                                                             friendService: initialFriendService,
-                                                             webSocketService: initialWebSocketService,
-                                                             friendSelectionListener: initialFriendSelectionListener,
-                                                             onLogout,
-                                                         }) => {
+export interface FriendListControllerRef {
+    refreshFriendsList: () => void;
+}
+
+const FriendList = forwardRef<FriendListControllerRef, FriendListControllerProps>(({
+                                                                                       friendService: initialFriendService,
+                                                                                       webSocketService: initialWebSocketService,
+                                                                                       friendSelectionListener: initialFriendSelectionListener,
+                                                                                       onLogout,
+                                                                                   }, ref) => {
     const [allFriends, setAllFriends] = useState<FriendDTO[]>([]);
     const [filteredFriends, setFilteredFriends] = useState<FriendDTO[]>([]);
     const [friendSelectionListener] = useState<FriendSelectionListener | undefined>(initialFriendSelectionListener);
@@ -32,6 +36,8 @@ const FriendList: React.FC<FriendListControllerProps> = ({
     const [selectedFriendId, setSelectedFriendId] = useState<string | null>(null);
     const [currentUser, setCurrentUser] = useState<string>('');
     const addFriendControllerRef = useRef<{ resetForm: () => void } | null>(null);
+
+    useImperativeHandle(ref, () => ({ refreshFriendsList }));
 
     useEffect(() => {
         initialize();
@@ -230,6 +236,6 @@ const FriendList: React.FC<FriendListControllerProps> = ({
             </div>
         </div>
     );
-};
+});
 
 export default FriendList;
