@@ -4,6 +4,7 @@ import type { AddFriendResult } from '../services/friend/FriendService';
 import type { WebSocketService } from '../services/websocket/WebSocketService';
 
 import '../styles/component/add-friend.css';
+import {SessionManager} from "../managers/SessionManager.tsx";
 
 interface AddFriendControllerProps {
     friendService?: IFriendService;
@@ -47,7 +48,13 @@ const AddFriendController = forwardRef<AddFriendControllerRef, AddFriendControll
                     setStatusType('success');
 
                     if (webSocketService?.isConnected()) {
-                        webSocketService.sendFriendNotificationString(trimmedUsername);
+                        const requester = SessionManager.getInstance().getUsername();
+                        if (requester) {
+                            webSocketService.sendFriendNotification(
+                                requester,
+                                trimmedUsername
+                            );
+                        }
                     }
 
                     setUsername('');
