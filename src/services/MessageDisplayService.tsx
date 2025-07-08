@@ -3,10 +3,8 @@ import { MessageDTO } from '../models/MessageDTO';
 import { parse, parseISO, isValid, format } from 'date-fns';
 
 export class MessageDisplayService {
-    /** Format d’affichage final */
     private static readonly DISPLAY_FORMATTER = 'yyyy-MM-dd HH:mm:ss';
 
-    /** Rend un message dans la conversation */
     public displayMessage(
         message: MessageDTO,
         isCurrentUser: boolean,
@@ -19,7 +17,6 @@ export class MessageDisplayService {
         );
     }
 
-    /** Construit le bloc visuel d’un message */
     private createUserMessage(
         message: MessageDTO,
         isCurrentUser: boolean
@@ -54,33 +51,27 @@ export class MessageDisplayService {
         );
     }
 
-    /** Tente de parser différents formats de date puis les reformate pour l’affichage */
     private formatDateTime(raw: string | null | undefined): string {
         if (!raw) return '';
 
         let date: Date | undefined;
 
-        // 1. ISO-8601 avec « T »
         if (raw.includes('T')) {
             date = parseISO(raw);
         }
 
-        // 2. Heure seule HH:mm:ss
         if (!date || !isValid(date)) {
             date = parse(raw, 'HH:mm:ss', new Date());
         }
 
-        // 3. Ancien format yyyy-MM-dd HH:mm:ss
         if (!date || !isValid(date)) {
             date = parse(raw, 'yyyy-MM-dd HH:mm:ss', new Date());
         }
 
-        // 4. Dernier recours : constructeur natif
         if (!isValid(date)) {
             date = new Date(raw);
         }
 
-        // Toujours vérifier la validité
         if (!isValid(date)) {
             console.warn('Unparseable date:', raw);
             return raw;

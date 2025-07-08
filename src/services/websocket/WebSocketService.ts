@@ -16,7 +16,14 @@ export class WebSocketService {
     private friendNotificationReceivedCallback?: (username: string) => void;
 
     constructor() {}
+    private friendAcceptedCallback?: (username: string) => void;
 
+
+    public onFriendAccepted(
+        cb: (username: string) => void,
+    ): void {
+        this.friendAcceptedCallback = cb;
+    }
     async connectToWebSocket(): Promise<boolean> {
         try {
             const jwt = SessionManager.getInstance().getToken();
@@ -177,18 +184,34 @@ export class WebSocketService {
     }
 
     subscribeToFriendNotifications(): void {
-        if (this.stompSession && this.stompSession.connected) {
-            this.stompSession.subscribe(WsConstants.TOPIC_NOTIFICATION_FRIEND, (message) => {
-                const receivedUsername: string = message.body;
-                console.log('=== FRIEND NOTIFICATION RECEIVED ===');
-                console.log('Username: ' + receivedUsername);
-                console.log('=====================================');
-                this.friendNotificationReceivedCallback?.(receivedUsername);
-            });
+        if (!this.stompSession?.connected) return;
 
-            console.log('Subscribed to friend notifications at: ' + WsConstants.APP_NOTIFICATION_FRIEND_ENDPOINT);
-        }
+        this.stompSession.subscribe(
+            WsConstants.TOPIC_NOTIFICATION_FRIEND,
+            (message) => {
+                let username: string | undefined;
+
+                try {
+                    const parsed = JSON.parse(message.body);
+                    username = parsed.username;
+                } catch {
+                    username = message.body;
+                }
+
+                console.log('=== FRIEND NOTIFICATION RECEIVED ===');
+                console.log('Username:', username);
+                console.log('=====================================');
+
+                this.friendNotificationReceivedCallback?.(username ?? '');
+            },
+        );
+
+        console.log(
+            'Subscribed to friend notifications @',
+            WsConstants.TOPIC_NOTIFICATION_FRIEND,
+        );
     }
+
 
     sendFriendNotification(usernameRequester: string, usernameReceiver: string): boolean {
         if (this.stompSession && this.stompSession.connected) {
@@ -215,24 +238,43 @@ export class WebSocketService {
         }
         return false;
     }
+    public subscribeToFriendAccepted(): void {
+        if (!this.stompSession?.connected) return;
 
-    sendFriendNotificationString(username: string): boolean {
-        if (this.stompSession && this.stompSession.connected) {
-            try {
-                this.stompSession.publish({
-                    destination: WsConstants.APP_NOTIFICATION_FRIEND_ENDPOINT,
-                    body: username
-                });
-                console.log('=== FRIEND ACCEPTED NOTIFICATION SENT ===');
-                console.log('Accepted friend: ' + username);
-                console.log('========================================');
-                return true;
-            } catch (_error) {
-                console.error('Error sending friend acceptance: ' + _error);
-                return false;
-            }
+        this.stompSession.subscribe(
+            WsConstants.TOPIC_NOTIFICATION_FRIEND,
+            (message) => {
+                const username = message.body as string;
+
+                console.log('=== FRIEND ACCEPTED NOTIFICATION RECEIVED ===');
+                console.log('Username : ', username);
+                console.log('=============================================');
+
+                this.friendAcceptedCallback?.(username);
+            },
+        );
+
+        console.log(
+            'Subscribed to friend accepted notifications @ ',
+            WsConstants.TOPIC_NOTIFICATION_FRIEND,
+        );
+    }
+    public sendFriendAccepted(username: string): boolean {
+        if (!this.stompSession?.connected) return false;
+        try {
+            this.stompSession.publish({
+                destination: WsConstants.APP_NOTIFICATION_FRIEND_ENDPOINT,
+                body: username,
+            });
+
+            console.log('=== FRIEND ACCEPTED NOTIFICATION SENT ===');
+            console.log('Accepted friend : ', username);
+            console.log('=========================================');
+            return true;
+        } catch (err) {
+            console.error('Error sending friend-accepted notification: ', err);
+            return false;
         }
-        return false;
     }
 
 

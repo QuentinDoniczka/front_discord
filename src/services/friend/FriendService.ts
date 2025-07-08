@@ -100,24 +100,26 @@ export class FriendService implements IFriendService {
         }
     }
 
-    private publishFriendNotification(requester: string, receiver: string): void {
+    private async publishFriendNotification(requester: string,
+                                            receiver: string): Promise<void> {
         try {
             if (!this.webSocketService.isConnected()) {
-                const connected = this.webSocketService.connectToWebSocket();
+                const connected = await this.webSocketService.connectToWebSocket();
                 if (!connected) {
-                    console.error("Impossible de se connecter au WebSocket pour envoyer la notification");
+                    console.error("Impossible de se connecter au WebSocket");
                     return;
                 }
+                this.webSocketService.subscribeToFriendNotifications();
             }
 
             const sent = this.webSocketService.sendFriendNotification(requester, receiver);
-            if (sent) {
-                console.log(`Notification d'ami envoyée avec succès de ${requester} vers ${receiver}`);
-            } else {
+            if (!sent) {
                 console.error("Échec de l'envoi de la notification d'ami");
+            } else {
+                console.log(`Notification envoyée de ${requester} vers ${receiver}`);
             }
         } catch (error) {
-            console.error(`Erreur lors de l'envoi de la notification WebSocket: ${error}`);
+            console.error("Erreur WebSocket :", error);
         }
     }
 }

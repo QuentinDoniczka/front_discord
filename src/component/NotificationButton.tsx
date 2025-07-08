@@ -121,7 +121,7 @@ const NotificationButtonController = forwardRef<NotificationButtonControllerRef>
             friendRequestServiceRef.current.acceptFriendRequest(username).then(success => {
                 if (success) {
                     if (webSocketServiceRef.current) {
-                        webSocketServiceRef.current.sendFriendNotificationString(username);
+                        webSocketServiceRef.current.sendFriendAccepted(username);
                     }
 
                     refreshRequestsList();
